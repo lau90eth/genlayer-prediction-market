@@ -1,25 +1,36 @@
-# genlayer_version: 0.1.0
-import genlayer as gl
+# { "Depends": "py-genlayer:1jb45aa8ynh2a9c9xn3b7qqh8sm5q93hwfp7jqmwsfhh8jpz09h6" }
+from genlayer import *
 
 class ParametricInsurance(gl.Contract):
-    def __init__(self, condition: str):
-        self.condition = condition
-        self.claimed = False
-        self.payout = False
+    flight_number: str
+    payout_triggered: bool
+    verdict: str
+
+    def __init__(self, flight_number: str):
+        self.flight_number = flight_number
+        self.payout_triggered = False
+        self.verdict = ""
 
     @gl.public.write
-    def check_and_pay(self, evidence_url: str) -> None:
-        prompt = f"Insurance condition: {self.condition}\n"
-        prompt += f"Evidence URL: {evidence_url}\n"
-        prompt += "If the condition is MET, answer only PAYOUT. Otherwise answer only NO_PAYOUT."
-        result = gl.nondet.exec_prompt(prompt).strip()
-        self.payout = (result == "PAYOUT")
-        self.claimed = True
+    def check_and_settle(self) -> None:
+        if self.payout_triggered:
+            return
+        fn = str(self.flight_number)
+        prompt = f"Was flight {fn} delayed more than 2 hours or cancelled recently? Answer only TRUE or FALSE."
+
+        def leader_fn() -> str:
+            return gl.nondet.exec_prompt(prompt)
+
+        def validator_fn(leaders_res) -> bool:
+            if not isinstance(leaders_res, gl.vm.Return):
+                return False
+            return True
+
+        result = gl.vm.run_nondet_unsafe(leader_fn, validator_fn)
+        self.verdict = result
+        if "TRUE" in result.upper():
+            self.payout_triggered = True
 
     @gl.public.view
-    def get_payout_status(self) -> str:
-        return "PAYOUT" if self.payout else "NO_PAYOUT"
-
-    @gl.public.view
-    def is_claimed(self) -> bool:
-        return self.claimed
+    def get_status(self) -> str:
+        return self.verdict

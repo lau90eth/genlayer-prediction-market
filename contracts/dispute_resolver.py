@@ -1,23 +1,29 @@
-# genlayer_version: 0.1.0
-import genlayer as gl
+# { "Depends": "py-genlayer:1jb45aa8ynh2a9c9xn3b7qqh8sm5q93hwfp7jqmwsfhh8jpz09h6" }
+from genlayer import *
 
 class DisputeResolver(gl.Contract):
-    def __init__(self, topic: str):
-        self.topic = topic
-        self.verdict = ""
-        self.resolved = False
+    last_verdict: str
+
+    def __init__(self):
+        self.last_verdict = ""
 
     @gl.public.write
-    def submit_evidence(self, claim: str, evidence_url: str) -> None:
-        prompt = f"Topic: {self.topic}\nClaim: {claim}\nEvidence: {evidence_url}\n"
-        prompt += "You are an impartial judge. Answer VALID or INVALID."
-        self.verdict = gl.nondet.exec_prompt(prompt).strip()
-        self.resolved = True
+    def resolve(self, claim_a: str, claim_b: str) -> None:
+        a = str(claim_a)
+        b = str(claim_b)
+        prompt = f"You are an impartial arbitrator. Party A claims: {a}. Party B claims: {b}. Give a fair one-sentence verdict."
+
+        def leader_fn() -> str:
+            return gl.nondet.exec_prompt(prompt)
+
+        def validator_fn(leaders_res) -> bool:
+            if not isinstance(leaders_res, gl.vm.Return):
+                return False
+            return True
+
+        result = gl.vm.run_nondet_unsafe(leader_fn, validator_fn)
+        self.last_verdict = result
 
     @gl.public.view
     def get_verdict(self) -> str:
-        return self.verdict
-
-    @gl.public.view
-    def is_resolved(self) -> bool:
-        return self.resolved
+        return self.last_verdict

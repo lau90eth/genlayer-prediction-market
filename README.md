@@ -2,18 +2,14 @@
 
 AI-powered contracts on GenLayer Testnet Bradbury (Phase 1).
 
-## What it does
-
-Resolves binary outcomes, disputes, insurance claims, and Q&A via **LLM consensus** using real-time web evidence. No oracles, no trusted third parties.
-
 ## Contracts
 
 | Contract | Address | Description |
 |---|---|---|
-| HelloAI | `0x0A09E80615C039dCBEE10dd52f4e2F7DAdBb4465` | Basic AI Q&A |
-| PredictionMarket | `0x36C4b7fD7494fac52d87B303B9B7065D4AfC1762` | Binary outcome resolver |
-| DisputeResolver | `0xB05b345816848DB8065317d15873EB036dF71b00` | Trustless AI arbitration |
-| ParametricInsurance | `0xeeD61647188709698D04bd4b5c0D0Dee83493615  ` | Flight delay / weather insurance |
+| HelloAI | `0xF01E92f25640426894D0315f9098011028D7090E` | Basic AI Q&A |
+| PredictionMarket | `0xdef4D47E7b0255690Dd4565820B53F20DeEe0e28` | Binary outcome resolver |
+| DisputeResolver | `0x1b5e440479016B4FeE73800CB0164Af1b9C7f2AB` | Trustless AI arbitration |
+| ParametricInsurance | `0x4f954d041756c299e8842D75a3A1cA63aecDb22F` | Flight delay insurance |
 
 ## Tech stack
 
@@ -24,6 +20,6 @@ Resolves binary outcomes, disputes, insurance claims, and Q&A via **LLM consensu
 ## Deploy
 
 ```bash
-genlayer deploy --contract contracts/prediction_market.py --args 'Will Bitcoin reach 100k in 2026?'
-genlayer deploy --contract contracts/dispute_resolver.py --args 'Online purchase refund dispute'
-genlayer deploy --contract contracts/parametric_insurance.py --args 'Flight delay over 3 hours'
+genlayer deploy --contract contracts/prediction_market.py --args '"Will Bitcoin reach 100k in 2026?"'
+genlayer deploy --contract contracts/dispute_resolver.py
+genlayer deploy --contract contracts/parametric_insurance.py --args '"AZ1234"'
