@@ -1,7 +1,7 @@
 # Nexus — AI Consensus Infrastructure on GenLayer
 
-**Nexus** is an AI-powered decision infrastructure built on GenLayer Bradbury Testnet.
-It deploys 4 specialized AI judges — each resolving a different type of claim using LLM consensus and real-world evidence:
+**Nexus** is an AI-powered decision infrastructure built on GenLayer Bradbury Testnet. 
+It deploys 4 specialized AI judges — each resolving a different type of claim using LLM consensus and real-world evidence: 
 disputes between parties, insurance claims, prediction outcomes, and general Q&A. No oracles, no trusted third parties.
 
 
