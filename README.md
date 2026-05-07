@@ -95,6 +95,10 @@ Reported separately as Research & Analysis contribution.
 
 ---
 
+## Tools
+
+[genvm-recon](https://github.com/lau90eth/genvm-recon) — Static analyzer for GenLayer Intelligent Contracts, built while developing Nexus. Detects 9 categories of issues causing deployment failures on Bradbury.
+
 ## Built by
 
 [lau90eth](https://github.com/lau90eth) — GenLayer Builders Program, May 2026
