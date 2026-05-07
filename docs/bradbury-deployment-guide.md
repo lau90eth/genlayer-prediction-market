@@ -277,6 +277,8 @@ Bradbury explorer: `https://explorer-bradbury.genlayer.com`
 
 [genvm-recon](https://github.com/lau90eth/genvm-recon) — Static analyzer that detects the issues documented in this guide before deployment.
 
+---
+
 *Guide by [lau90eth](https://github.com/lau90eth) — May 2026*
 *Based on hands-on experience deploying 4 contracts on Bradbury Phase 1*
 
