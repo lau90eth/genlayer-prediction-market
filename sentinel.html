@@ -264,7 +264,7 @@ window.connectWallet = async function() {
     const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
     walletAddress = accounts[0];
 
-    const chainIdHex = '0x' + (14853).toString(16);
+    const chainIdHex = '0x' + (4221).toString(16);
     try {
       await window.ethereum.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: chainIdHex }] });
     } catch(e) {
@@ -274,7 +274,7 @@ window.connectWallet = async function() {
           params: [{
             chainId: chainIdHex,
             chainName: 'GenLayer Bradbury Testnet',
-            rpcUrls: ['https://rpc.bradbury.genlayer.com'],
+            rpcUrls: ['https://rpc-bradbury.genlayer.com'],
             nativeCurrency: { name: 'GEN', symbol: 'GEN', decimals: 18 },
             blockExplorerUrls: ['https://explorer-bradbury.genlayer.com']
           }]
