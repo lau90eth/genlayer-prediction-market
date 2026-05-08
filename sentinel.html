@@ -664,7 +664,7 @@ window.startAudit = async function() {
           showResult(v, s, f, hash, c);
         }
       } catch(e) { /* keep polling */ }
-    }, 5000);
+    }, 15000);
 
   } catch(e) {
     panel.className = 'result-panel visible error';
