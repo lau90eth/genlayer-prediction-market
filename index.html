@@ -3,155 +3,551 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Nexus V2 — AI Consensus Infrastructure · GenLayer Bradbury</title>
+<title>GenLayer AI Contracts — Bradbury Testnet</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
 <style>
-  :root { --bg: #030712; --surface: #0d1117; --border: #1f2937; --accent: #00ff88; --accent2: #00b4ff; --accent3: #ff6b35; --text: #e2e8f0; --muted: #4b5563; --mono: 'Share Tech Mono', monospace; --sans: 'Syne', sans-serif; }
+  :root {
+    --bg: #030712;
+    --surface: #0d1117;
+    --border: #1f2937;
+    --accent: #00ff88;
+    --accent2: #00b4ff;
+    --accent3: #ff6b35;
+    --text: #e2e8f0;
+    --muted: #4b5563;
+    --mono: 'Share Tech Mono', monospace;
+    --sans: 'Syne', sans-serif;
+  }
+
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { background: var(--bg); color: var(--text); font-family: var(--sans); min-height: 100vh; overflow-x: hidden; }
-  body::before { content: ''; position: fixed; inset: 0; background-image: linear-gradient(rgba(0,255,136,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0,255,136,0.03) 1px, transparent 1px); background-size: 40px 40px; pointer-events: none; z-index: 0; }
-  .container { position: relative; z-index: 1; max-width: 900px; margin: 0 auto; padding: 0 24px 80px; }
-  header { padding: 48px 0 40px; border-bottom: 1px solid var(--border); margin-bottom: 48px; }
-  .header-badge { display: inline-flex; align-items: center; gap: 8px; font-family: var(--mono); font-size: 11px; color: var(--accent); border: 1px solid rgba(0,255,136,0.3); padding: 4px 12px; border-radius: 2px; margin-bottom: 20px; letter-spacing: 0.1em; }
-  .dot { width: 6px; height: 6px; background: var(--accent); border-radius: 50%; animation: pulse 2s ease-in-out infinite; }
-  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
-  h1 { font-size: clamp(28px, 5vw, 48px); font-weight: 800; line-height: 1.1; letter-spacing: -0.02em; margin-bottom: 12px; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Grid background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,255,136,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,255,136,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Glow orbs */
+  body::after {
+    content: '';
+    position: fixed;
+    top: -200px;
+    left: -200px;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(0,255,136,0.06) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    position: relative;
+    z-index: 1;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 24px 80px;
+  }
+
+  /* Header */
+  header {
+    padding: 48px 0 40px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 48px;
+  }
+
+  .header-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    border: 1px solid rgba(0,255,136,0.3);
+    padding: 4px 12px;
+    border-radius: 2px;
+    margin-bottom: 20px;
+    letter-spacing: 0.1em;
+  }
+
+  .dot {
+    width: 6px;
+    height: 6px;
+    background: var(--accent);
+    border-radius: 50%;
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  h1 {
+    font-size: clamp(28px, 5vw, 48px);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-bottom: 12px;
+  }
+
   h1 span { color: var(--accent); }
-  .subtitle { font-family: var(--mono); font-size: 13px; color: var(--muted); letter-spacing: 0.05em; }
-  .v2-badge { display: inline-block; font-family: var(--mono); font-size: 10px; color: var(--accent); border: 1px solid rgba(0,255,136,0.4); padding: 2px 8px; border-radius: 2px; margin-left: 10px; vertical-align: middle; }
-  .contracts-grid { display: grid; gap: 24px; }
-  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 4px; padding: 28px; position: relative; transition: border-color 0.2s; }
-  .card:hover { border-color: rgba(0,255,136,0.2); }
-  .card-accent { position: absolute; top: 0; left: 0; width: 3px; height: 100%; border-radius: 4px 0 0 4px; }
+
+  .subtitle {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+  }
+
+  /* Contract cards */
+  .contracts-grid {
+    display: grid;
+    gap: 24px;
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 28px;
+    position: relative;
+    transition: border-color 0.2s;
+  }
+
+  .card:hover {
+    border-color: rgba(0,255,136,0.2);
+  }
+
+  .card-accent {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 3px;
+    height: 100%;
+    border-radius: 4px 0 0 4px;
+  }
+
   .card:nth-child(1) .card-accent { background: var(--accent); }
   .card:nth-child(2) .card-accent { background: var(--accent2); }
   .card:nth-child(3) .card-accent { background: var(--accent3); }
   .card:nth-child(4) .card-accent { background: #a855f7; }
-  .card-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 8px; gap: 12px; }
-  .card-title { font-size: 18px; font-weight: 700; letter-spacing: -0.01em; }
-  .card-tag { font-family: var(--mono); font-size: 10px; padding: 3px 8px; border-radius: 2px; white-space: nowrap; flex-shrink: 0; }
+
+  .card-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    gap: 12px;
+  }
+
+  .card-title {
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+
+  .card-tag {
+    font-family: var(--mono);
+    font-size: 10px;
+    padding: 3px 8px;
+    border-radius: 2px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
   .card:nth-child(1) .card-tag { background: rgba(0,255,136,0.1); color: var(--accent); border: 1px solid rgba(0,255,136,0.2); }
   .card:nth-child(2) .card-tag { background: rgba(0,180,255,0.1); color: var(--accent2); border: 1px solid rgba(0,180,255,0.2); }
   .card:nth-child(3) .card-tag { background: rgba(255,107,53,0.1); color: var(--accent3); border: 1px solid rgba(255,107,53,0.2); }
   .card:nth-child(4) .card-tag { background: rgba(168,85,247,0.1); color: #a855f7; border: 1px solid rgba(168,85,247,0.2); }
-  .card-desc { font-size: 13px; color: var(--muted); margin-bottom: 20px; line-height: 1.6; }
-  .address-line { font-family: var(--mono); font-size: 10px; color: var(--muted); margin-bottom: 20px; word-break: break-all; opacity: 0.6; }
-  .input-group { display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
-  input, textarea { background: var(--bg); border: 1px solid var(--border); color: var(--text); font-family: var(--mono); font-size: 13px; padding: 10px 14px; border-radius: 2px; outline: none; transition: border-color 0.2s; width: 100%; resize: vertical; }
-  input:focus, textarea:focus { border-color: var(--accent); }
-  input::placeholder, textarea::placeholder { color: var(--muted); }
-  .btn-row { display: flex; gap: 10px; flex-wrap: wrap; }
-  button { font-family: var(--mono); font-size: 12px; letter-spacing: 0.08em; padding: 10px 20px; border-radius: 2px; border: none; cursor: pointer; transition: all 0.15s; text-transform: uppercase; }
-  .btn-primary { background: var(--accent); color: var(--bg); font-weight: 700; }
+
+  .card-desc {
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 20px;
+    line-height: 1.6;
+  }
+
+  .address-line {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--muted);
+    margin-bottom: 20px;
+    word-break: break-all;
+    opacity: 0.6;
+  }
+
+  /* Inputs */
+  .input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+
+  input, textarea {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: var(--mono);
+    font-size: 13px;
+    padding: 10px 14px;
+    border-radius: 2px;
+    outline: none;
+    transition: border-color 0.2s;
+    width: 100%;
+    resize: vertical;
+  }
+
+  input:focus, textarea:focus {
+    border-color: var(--accent);
+  }
+
+  input::placeholder, textarea::placeholder {
+    color: var(--muted);
+  }
+
+  /* Buttons */
+  .btn-row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  button {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    padding: 10px 20px;
+    border-radius: 2px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.15s;
+    text-transform: uppercase;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: var(--bg);
+    font-weight: 700;
+  }
+
   .btn-primary:hover { background: #00e678; transform: translateY(-1px); }
+  .btn-primary:active { transform: translateY(0); }
+
   .card:nth-child(2) .btn-primary { background: var(--accent2); }
   .card:nth-child(2) .btn-primary:hover { background: #33c4ff; }
   .card:nth-child(3) .btn-primary { background: var(--accent3); }
   .card:nth-child(3) .btn-primary:hover { background: #ff8555; }
   .card:nth-child(4) .btn-primary { background: #a855f7; }
   .card:nth-child(4) .btn-primary:hover { background: #bc7af9; }
-  .btn-secondary { background: transparent; color: var(--muted); border: 1px solid var(--border); }
+
+  .btn-secondary {
+    background: transparent;
+    color: var(--muted);
+    border: 1px solid var(--border);
+  }
+
   .btn-secondary:hover { border-color: var(--text); color: var(--text); }
-  button:disabled { opacity: 0.4; cursor: not-allowed; transform: none !important; }
-  .output { margin-top: 16px; background: var(--bg); border: 1px solid var(--border); border-radius: 2px; padding: 14px; font-family: var(--mono); font-size: 12px; line-height: 1.7; min-height: 60px; display: none; }
+
+  button:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    transform: none !important;
+  }
+
+  /* Output */
+  .output {
+    margin-top: 16px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    padding: 14px;
+    font-family: var(--mono);
+    font-size: 12px;
+    line-height: 1.7;
+    min-height: 60px;
+    display: none;
+  }
+
   .output.visible { display: block; }
+
   .output.loading { color: var(--muted); animation: blink 1s step-end infinite; }
   .output.success { color: var(--accent); border-color: rgba(0,255,136,0.2); }
   .output.error { color: #ef4444; border-color: rgba(239,68,68,0.2); }
   .output.info { color: var(--accent2); }
-  @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
-  footer { margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--border); font-family: var(--mono); font-size: 11px; color: var(--muted); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+  }
+
+  .tx-link {
+    display: inline-block;
+    margin-top: 8px;
+    color: var(--muted);
+    font-size: 11px;
+    text-decoration: none;
+    border-bottom: 1px solid var(--border);
+    transition: color 0.15s;
+  }
+
+  .tx-link:hover { color: var(--text); }
+
+  /* Footer */
+  footer {
+    margin-top: 64px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: gap;
+    gap: 12px;
+  }
+
   footer a { color: var(--muted); text-decoration: none; }
   footer a:hover { color: var(--accent); }
-  .spinner { display: inline-block; animation: spin 1s linear infinite; }
-  @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+  /* Spinner */
+  .spinner {
+    display: inline-block;
+    animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
 </style>
 </head>
 <body>
 <div class="container">
+
   <header>
-    <div class="header-badge"><div class="dot"></div>BRADBURY TESTNET · PHASE 1</div>
-    <h1>Nexus <span>V2</span> <span class="v2-badge">UPGRADED</span></h1>
-    <p class="subtitle">Real-world evidence fetching · Independent validator consensus · 4 intelligent contracts</p>
+    <div class="header-badge">
+      <div class="dot"></div>
+      BRADBURY TESTNET · PHASE 1
+    </div>
+    <h1>GenLayer <span>AI Contracts</span></h1>
+    <p class="subtitle">4 intelligent contracts powered by LLM consensus · gl.vm.run_nondet_unsafe</p>
   </header>
+
   <div class="contracts-grid">
+
+    <!-- HelloAI -->
     <div class="card">
       <div class="card-accent"></div>
-      <div class="card-header"><div class="card-title">PredictionMarket</div><div class="card-tag">EVIDENCE-BACKED</div></div>
-      <p class="card-desc">Binary outcome resolver. Each validator independently fetches the evidence URL and reaches its own conclusion. Consensus requires agreement across 5 nodes.</p>
-      <div class="address-line">0x7827a3521B7d36D5ed93eF373c607e32113dE2CE</div>
+      <div class="card-header">
+        <div class="card-title">HelloAI</div>
+        <div class="card-tag">ON-CHAIN Q&amp;A</div>
+      </div>
+      <p class="card-desc">Ask any question. The answer is resolved via LLM consensus across 5 validator nodes on GenLayer Bradbury.</p>
+      <div class="address-line">0xF01E92f25640426894D0315f9098011028D7090E</div>
+      <div class="input-group">
+        <input id="hello-q" type="text" placeholder="Ask anything..." value="What is the capital of France?">
+      </div>
       <div class="btn-row">
-        <button class="btn-primary" onclick="readMarket()">Read outcome</button>
-        <button class="btn-secondary" onclick="readPool()">Read pool</button>
+        <button class="btn-primary" onclick="askHello()">Ask on-chain</button>
+        <button class="btn-secondary" onclick="readHello()">Read last answer</button>
+      </div>
+      <div class="output" id="hello-out"></div>
+    </div>
+
+    <!-- PredictionMarket -->
+    <div class="card">
+      <div class="card-accent"></div>
+      <div class="card-header">
+        <div class="card-title">PredictionMarket</div>
+        <div class="card-tag">TRUE/FALSE RESOLVER</div>
+      </div>
+      <p class="card-desc">Binary outcome resolver. The LLM consensus evaluates the deployed question and returns TRUE or FALSE.</p>
+      <div class="address-line">0xdef4D47E7b0255690Dd4565820B53F20DeEe0e28</div>
+      <div class="btn-row">
+        <button class="btn-primary" onclick="resolveMarket()">Resolve market</button>
+        <button class="btn-secondary" onclick="readMarket()">Read outcome</button>
       </div>
       <div class="output" id="market-out"></div>
     </div>
+
+    <!-- DisputeResolver -->
     <div class="card">
       <div class="card-accent"></div>
-      <div class="card-header"><div class="card-title">ParametricInsurance</div><div class="card-tag">FLIGHT DELAY</div></div>
-      <p class="card-desc">Flight AZ100. Validators fetch live flight data independently and trigger payout only when consensus confirms delay &gt; 2h or cancellation.</p>
-      <div class="address-line">0x562F85Fbd585F98ba0D8B160f01CE20333f2a298</div>
-      <div class="btn-row"><button class="btn-primary" onclick="readInsurance()">Read status</button></div>
-      <div class="output" id="insurance-out"></div>
-    </div>
-    <div class="card">
-      <div class="card-accent"></div>
-      <div class="card-header"><div class="card-title">DisputeResolver</div><div class="card-tag">AI ARBITRATION</div></div>
-      <p class="card-desc">Trustless arbitration with web evidence. Validators independently verify the evidence URL before accepting the verdict.</p>
-      <div class="address-line">0x06f625b012d2822Aa69E2Bd542DdcdE574DCCd9f</div>
-      <div class="btn-row"><button class="btn-primary" onclick="readDispute()">Read verdict</button></div>
+      <div class="card-header">
+        <div class="card-title">DisputeResolver</div>
+        <div class="card-tag">AI ARBITRATION</div>
+      </div>
+      <p class="card-desc">Trustless arbitration. Submit two competing claims and get an impartial AI verdict enforced by consensus.</p>
+      <div class="address-line">0x1b5e440479016B4FeE73800CB0164Af1b9C7f2AB</div>
+      <div class="input-group">
+        <input id="claim-a" type="text" placeholder="Party A claim..." value="I paid for the service but never received it">
+        <input id="claim-b" type="text" placeholder="Party B claim..." value="The service was delivered as agreed">
+      </div>
+      <div class="btn-row">
+        <button class="btn-primary" onclick="resolveDispute()">Arbitrate</button>
+        <button class="btn-secondary" onclick="readDispute()">Read verdict</button>
+      </div>
       <div class="output" id="dispute-out"></div>
     </div>
+
+    <!-- ParametricInsurance -->
     <div class="card">
       <div class="card-accent"></div>
-      <div class="card-header"><div class="card-title">HelloAI</div><div class="card-tag">EVIDENCE Q&amp;A</div></div>
-      <p class="card-desc">Ask a question grounded in a real URL. The validator independently checks whether the leader's answer is consistent with the fetched evidence.</p>
-      <div class="address-line">0x527D6B123cd2411BE5637bDA17b9d874D85Fe838</div>
-      <div class="btn-row"><button class="btn-primary" onclick="readHello()">Read last answer</button></div>
-      <div class="output" id="hello-out"></div>
+      <div class="card-header">
+        <div class="card-title">ParametricInsurance</div>
+        <div class="card-tag">FLIGHT DELAY</div>
+      </div>
+      <p class="card-desc">Automated flight delay insurance. The AI checks real-world data and triggers payout if delay exceeds 2 hours.</p>
+      <div class="address-line">0x4f954d041756c299e8842D75a3A1cA63aecDb22F</div>
+      <div class="btn-row">
+        <button class="btn-primary" onclick="checkInsurance()">Check &amp; settle</button>
+        <button class="btn-secondary" onclick="readInsurance()">Read status</button>
+      </div>
+      <div class="output" id="insurance-out"></div>
     </div>
+
   </div>
+
   <footer>
     <span>Built by <a href="https://github.com/lau90eth" target="_blank">lau90eth</a> · GenLayer Builders Program</span>
     <span><a href="https://github.com/lau90eth/genlayer-prediction-market" target="_blank">github.com/lau90eth/genlayer-prediction-market</a></span>
   </footer>
+
 </div>
+
 <script type="module">
+// ─── Config ───────────────────────────────────────────────────────────────────
+const EXPLORER = 'https://explorer-bradbury.genlayer.com/tx/';
+
 const CONTRACTS = {
-  market:    '0x7827a3521B7d36D5ed93eF373c607e32113dE2CE',
-  insurance: '0x562F85Fbd585F98ba0D8B160f01CE20333f2a298',
-  dispute:   '0x06f625b012d2822Aa69E2Bd542DdcdE574DCCd9f',
-  hello:     '0x527D6B123cd2411BE5637bDA17b9d874D85Fe838',
+  hello:     '0xF01E92f25640426894D0315f9098011028D7090E',
+  market:    '0xdef4D47E7b0255690Dd4565820B53F20DeEe0e28',
+  dispute:   '0x1b5e440479016B4FeE73800CB0164Af1b9C7f2AB',
+  insurance: '0x4f954d041756c299e8842D75a3A1cA63aecDb22F',
 };
+
+// ─── Load genlayer-js from CDN ─────────────────────────────────────────────────
 let client;
+
 async function initClient() {
   if (client) return client;
-  const { createClient } = await import('https://esm.sh/genlayer-js@latest');
-  const { testnetBradbury } = await import('https://esm.sh/genlayer-js@latest/chains');
-  client = createClient({ chain: testnetBradbury });
-  return client;
+  try {
+    const { createClient } = await import('https://esm.sh/genlayer-js@latest');
+    const { testnetBradbury } = await import('https://esm.sh/genlayer-js@latest/chains');
+    client = createClient({ chain: testnetBradbury });
+    return client;
+  } catch(e) {
+    throw new Error('Failed to load genlayer-js: ' + e.message);
+  }
 }
+
+// ─── UI helpers ───────────────────────────────────────────────────────────────
 function out(id, msg, type = 'info') {
   const el = document.getElementById(id);
   el.className = `output visible ${type}`;
   el.innerHTML = msg;
 }
-async function read(address, fn, outId) {
-  out(outId, '<span style="animation: spin 1s linear infinite; display:inline-block">⟳</span> Reading...', 'loading');
+
+function loading(id, msg = 'Sending transaction to Bradbury testnet...') {
+  out(id, `<span class="spinner">⟳</span> ${msg}`, 'loading');
+}
+
+function txLink(hash) {
+  return `<br><a class="tx-link" href="${EXPLORER}${hash}" target="_blank">↗ View on explorer: ${hash.slice(0,20)}...</a>`;
+}
+
+// ─── Read helpers ──────────────────────────────────────────────────────────────
+async function readContract(address, method, outId) {
+  loading(outId, `Reading ${method}...`);
   try {
     const c = await initClient();
-    const result = await c.readContract({ address, functionName: fn, args: [] });
-    out(outId, `<strong>${result || '(empty)'}</strong>`, result ? 'success' : 'info');
+    const result = await c.readContract({
+      address,
+      functionName: method,
+      args: [],
+    });
+    const val = result ?? '(empty)';
+    out(outId, `${method}: <strong>${val}</strong>`, val ? 'success' : 'info');
   } catch(e) {
     out(outId, `Error: ${e.message}`, 'error');
   }
 }
-window.readMarket    = () => read(CONTRACTS.market,    'get_outcome', 'market-out');
-window.readPool      = () => read(CONTRACTS.market,    'get_pool',    'market-out');
-window.readInsurance = () => read(CONTRACTS.insurance, 'get_status',  'insurance-out');
-window.readDispute   = () => read(CONTRACTS.dispute,   'get_verdict', 'dispute-out');
-window.readHello     = () => read(CONTRACTS.hello,     'get_answer',  'hello-out');
+
+// ─── Write helper (read-only frontend — shows instructions) ───────────────────
+// Note: write transactions require a private key. This frontend demonstrates
+// read calls. For write calls, use the CLI commands shown below.
+function showWriteInstructions(outId, cmd) {
+  out(outId,
+    `Write transactions require a funded account.<br><br>` +
+    `Run this command in your terminal:<br><br>` +
+    `<code style="color:var(--accent);word-break:break-all">${cmd}</code>`,
+    'info'
+  );
+}
+
+// ─── HelloAI ──────────────────────────────────────────────────────────────────
+window.askHello = function() {
+  const q = document.getElementById('hello-q').value.trim() || 'What is 2+2?';
+  showWriteInstructions('hello-out',
+    `genlayer write ${CONTRACTS.hello} ask "${q}"`
+  );
+};
+
+window.readHello = async function() {
+  await readContract(CONTRACTS.hello, 'get_answer', 'hello-out');
+};
+
+// ─── PredictionMarket ─────────────────────────────────────────────────────────
+window.resolveMarket = function() {
+  showWriteInstructions('market-out',
+    `genlayer write ${CONTRACTS.market} resolve`
+  );
+};
+
+window.readMarket = async function() {
+  await readContract(CONTRACTS.market, 'get_outcome', 'market-out');
+};
+
+// ─── DisputeResolver ──────────────────────────────────────────────────────────
+window.resolveDispute = function() {
+  const a = document.getElementById('claim-a').value.trim();
+  const b = document.getElementById('claim-b').value.trim();
+  showWriteInstructions('dispute-out',
+    `genlayer write ${CONTRACTS.dispute} resolve "${a}" "${b}"`
+  );
+};
+
+window.readDispute = async function() {
+  await readContract(CONTRACTS.dispute, 'get_verdict', 'dispute-out');
+};
+
+// ─── ParametricInsurance ──────────────────────────────────────────────────────
+window.checkInsurance = function() {
+  showWriteInstructions('insurance-out',
+    `genlayer write ${CONTRACTS.insurance} check_and_settle`
+  );
+};
+
+window.readInsurance = async function() {
+  await readContract(CONTRACTS.insurance, 'get_status', 'insurance-out');
+};
 </script>
 </body>
 </html>
