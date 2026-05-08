@@ -22,372 +22,93 @@
     --display: 'Bebas Neue', sans-serif;
     --body: 'DM Sans', sans-serif;
   }
-
   * { margin: 0; padding: 0; box-sizing: border-box; }
-
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: var(--body);
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
-
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.05) 2px, rgba(0,0,0,0.05) 4px);
-    pointer-events: none;
-    z-index: 100;
-  }
-
-  body::after {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image:
-      linear-gradient(rgba(255,60,0,0.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255,60,0,0.03) 1px, transparent 1px);
-    background-size: 60px 60px;
-    pointer-events: none;
-    z-index: 0;
-  }
-
-  .container {
-    position: relative;
-    z-index: 1;
-    max-width: 780px;
-    margin: 0 auto;
-    padding: 0 24px 80px;
-  }
-
-  header {
-    padding: 60px 0 48px;
-    border-bottom: 1px solid var(--border);
-    margin-bottom: 52px;
-    position: relative;
-  }
-
-  .header-top {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 16px;
-  }
-
-  .header-left { display: flex; align-items: center; gap: 16px; }
-
-  .sentinel-icon {
-    width: 48px; height: 48px;
-    border: 2px solid var(--accent);
-    display: flex; align-items: center; justify-content: center;
-  }
-
-  .sentinel-icon::before {
-    content: '⬡';
-    font-size: 28px;
-    color: var(--accent);
-    animation: pulse-icon 3s ease-in-out infinite;
-  }
-
+  body { background: var(--bg); color: var(--text); font-family: var(--body); min-height: 100vh; overflow-x: hidden; }
+  body::before { content:''; position:fixed; inset:0; background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.05) 2px,rgba(0,0,0,0.05) 4px); pointer-events:none; z-index:100; }
+  body::after { content:''; position:fixed; inset:0; background-image:linear-gradient(rgba(255,60,0,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,60,0,0.03) 1px,transparent 1px); background-size:60px 60px; pointer-events:none; z-index:0; }
+  .container { position:relative; z-index:1; max-width:780px; margin:0 auto; padding:0 24px 80px; }
+  header { padding:60px 0 48px; border-bottom:1px solid var(--border); margin-bottom:52px; }
+  .header-top { display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; }
+  .header-left { display:flex; align-items:center; gap:16px; }
+  .sentinel-icon { width:48px; height:48px; border:2px solid var(--accent); display:flex; align-items:center; justify-content:center; }
+  .sentinel-icon::before { content:'⬡'; font-size:28px; color:var(--accent); animation:pulse-icon 3s ease-in-out infinite; }
   @keyframes pulse-icon { 0%,100%{opacity:1} 50%{opacity:0.5} }
-
-  .status-badge {
-    font-family: var(--mono);
-    font-size: 10px;
-    color: var(--safe);
-    border: 1px solid rgba(0,255,136,0.3);
-    padding: 4px 10px;
-    letter-spacing: 0.15em;
-    display: flex; align-items: center; gap: 6px;
-  }
-
-  .status-dot {
-    width: 5px; height: 5px;
-    background: var(--safe);
-    border-radius: 50%;
-    animation: blink 2s step-end infinite;
-  }
-
+  .status-badge { font-family:var(--mono); font-size:10px; color:var(--safe); border:1px solid rgba(0,255,136,0.3); padding:4px 10px; letter-spacing:0.15em; display:flex; align-items:center; gap:6px; }
+  .status-dot { width:5px; height:5px; background:var(--safe); border-radius:50%; animation:blink 2s step-end infinite; }
   @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
-
-  .btn-wallet {
-    font-family: var(--mono);
-    font-size: 10px;
-    letter-spacing: 0.08em;
-    padding: 10px 16px;
-    border: 1px solid var(--border);
-    background: var(--surface);
-    color: var(--muted);
-    cursor: pointer;
-    transition: all 0.2s;
-    text-transform: uppercase;
-  }
-
-  .btn-wallet:hover { border-color: var(--accent); color: var(--text); }
-  .btn-wallet.connected { border-color: var(--safe); color: var(--safe); }
-
-  h1 {
-    font-family: var(--display);
-    font-size: clamp(52px, 8vw, 88px);
-    letter-spacing: 0.04em;
-    line-height: 0.9;
-    margin-bottom: 16px;
-  }
-
-  h1 .accent { color: var(--accent); }
-
-  .tagline {
-    font-family: var(--mono);
-    font-size: 12px;
-    color: var(--muted);
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-  }
-
-  .contract-address {
-    margin-top: 12px;
-    font-family: var(--mono);
-    font-size: 9px;
-    color: var(--muted);
-  }
-
-  .section-label {
-    font-family: var(--mono);
-    font-size: 10px;
-    color: var(--accent);
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    margin-bottom: 12px;
-    display: flex; align-items: center; gap: 8px;
-  }
-
+  .btn-wallet { font-family:var(--mono); font-size:10px; letter-spacing:0.08em; padding:10px 16px; border:1px solid var(--border); background:var(--surface); color:var(--muted); cursor:pointer; transition:all 0.2s; text-transform:uppercase; }
+  .btn-wallet:hover { border-color:var(--accent); color:var(--text); }
+  .btn-wallet.connected { border-color:var(--safe); color:var(--safe); }
+  h1 { font-family:var(--display); font-size:clamp(52px,8vw,88px); letter-spacing:0.04em; line-height:0.9; margin-bottom:16px; }
+  h1 .accent { color:var(--accent); }
+  .tagline { font-family:var(--mono); font-size:12px; color:var(--muted); letter-spacing:0.1em; text-transform:uppercase; }
+  .contract-address { margin-top:12px; font-family:var(--mono); font-size:9px; color:var(--muted); }
+  .section-label { font-family:var(--mono); font-size:10px; color:var(--accent); letter-spacing:0.15em; text-transform:uppercase; margin-bottom:12px; display:flex; align-items:center; gap:8px; }
   .section-label::after { content:''; flex:1; height:1px; background:var(--border); }
-
-  .input-wrapper { position: relative; margin-bottom: 16px; }
-
-  .input-wrapper::before {
-    content: '→';
-    position: absolute;
-    left: 16px; top: 50%;
-    transform: translateY(-50%);
-    font-family: var(--mono);
-    color: var(--accent);
-    font-size: 14px;
-    pointer-events: none;
-  }
-
-  input[type="text"] {
-    width: 100%;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    color: var(--text);
-    font-family: var(--mono);
-    font-size: 12px;
-    padding: 16px 16px 16px 40px;
-    outline: none;
-    transition: border-color 0.2s;
-    letter-spacing: 0.02em;
-  }
-
-  input[type="text"]:focus { border-color: var(--accent); }
-  input[type="text"]::placeholder { color: var(--muted); }
-
-  .btn-audit {
-    width: 100%;
-    background: var(--accent);
-    color: var(--bg);
-    border: none;
-    font-family: var(--display);
-    font-size: 24px;
-    letter-spacing: 0.1em;
-    padding: 18px;
-    cursor: pointer;
-    transition: all 0.15s;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .btn-audit::before {
-    content: '';
-    position: absolute; inset: 0;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
-    transform: translateX(-100%);
-    transition: transform 0.4s;
-  }
-
-  .btn-audit:hover::before { transform: translateX(100%); }
-  .btn-audit:hover { background: var(--accent2); transform: translateY(-1px); }
-  .btn-audit:active { transform: translateY(0); }
-  .btn-audit:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
-
-  .wallet-hint {
-    font-family: var(--mono);
-    font-size: 10px;
-    color: var(--muted);
-    text-align: center;
-    margin-top: 10px;
-  }
-
-  .result-panel {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    padding: 32px;
-    display: none;
-    position: relative;
-    overflow: hidden;
-    margin-bottom: 48px;
-  }
-
-  .result-panel.visible { display: block; }
+  .input-wrapper { position:relative; margin-bottom:16px; }
+  .input-wrapper::before { content:'→'; position:absolute; left:16px; top:50%; transform:translateY(-50%); font-family:var(--mono); color:var(--accent); font-size:14px; pointer-events:none; }
+  input[type="text"] { width:100%; background:var(--surface); border:1px solid var(--border); color:var(--text); font-family:var(--mono); font-size:12px; padding:16px 16px 16px 40px; outline:none; transition:border-color 0.2s; letter-spacing:0.02em; }
+  input[type="text"]:focus { border-color:var(--accent); }
+  input[type="text"]::placeholder { color:var(--muted); }
+  .btn-audit { width:100%; background:var(--accent); color:var(--bg); border:none; font-family:var(--display); font-size:24px; letter-spacing:0.1em; padding:18px; cursor:pointer; transition:all 0.15s; position:relative; overflow:hidden; }
+  .btn-audit::before { content:''; position:absolute; inset:0; background:linear-gradient(90deg,transparent,rgba(255,255,255,0.1),transparent); transform:translateX(-100%); transition:transform 0.4s; }
+  .btn-audit:hover::before { transform:translateX(100%); }
+  .btn-audit:hover { background:var(--accent2); transform:translateY(-1px); }
+  .btn-audit:active { transform:translateY(0); }
+  .btn-audit:disabled { opacity:0.4; cursor:not-allowed; transform:none; }
+  .wallet-hint { font-family:var(--mono); font-size:10px; color:var(--muted); text-align:center; margin-top:10px; }
+  .result-panel { background:var(--surface); border:1px solid var(--border); padding:32px; display:none; position:relative; overflow:hidden; margin-bottom:48px; }
+  .result-panel.visible { display:block; }
   .result-panel::before { content:''; position:absolute; top:0; left:0; width:4px; height:100%; }
-  .result-panel.safe::before { background: var(--safe); }
-  .result-panel.unsafe::before { background: var(--unsafe); }
-  .result-panel.loading::before { background: var(--pending); animation: slide-down 1.5s linear infinite; }
-  .result-panel.error::before { background: var(--muted); }
-
+  .result-panel.safe::before { background:var(--safe); }
+  .result-panel.unsafe::before { background:var(--unsafe); }
+  .result-panel.loading::before { background:var(--pending); animation:slide-down 1.5s linear infinite; }
+  .result-panel.error::before { background:var(--muted); }
   @keyframes slide-down { 0%{height:0%;top:0} 50%{height:100%;top:0} 100%{height:0%;top:100%} }
-
-  .result-header {
-    display: flex; align-items: center; justify-content: space-between;
-    margin-bottom: 24px;
-  }
-
-  .verdict-display {
-    font-family: var(--display);
-    font-size: 52px;
-    letter-spacing: 0.05em;
-    line-height: 1;
-  }
-
-  .verdict-display.safe { color: var(--safe); }
-  .verdict-display.unsafe { color: var(--unsafe); }
-  .verdict-display.loading { color: var(--pending); }
-  .verdict-display.error { color: var(--muted); }
-
-  .severity-meter { text-align: right; }
-
-  .severity-number {
-    font-family: var(--display);
-    font-size: 40px;
-    color: var(--text);
-    line-height: 1;
-  }
-
-  .severity-label {
-    font-family: var(--mono);
-    font-size: 9px;
-    color: var(--muted);
-    letter-spacing: 0.1em;
-  }
-
+  .result-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:24px; }
+  .verdict-display { font-family:var(--display); font-size:52px; letter-spacing:0.05em; line-height:1; }
+  .verdict-display.safe { color:var(--safe); }
+  .verdict-display.unsafe { color:var(--unsafe); }
+  .verdict-display.loading { color:var(--pending); }
+  .verdict-display.error { color:var(--muted); }
+  .severity-meter { text-align:right; }
+  .severity-number { font-family:var(--display); font-size:40px; color:var(--text); line-height:1; }
+  .severity-label { font-family:var(--mono); font-size:9px; color:var(--muted); letter-spacing:0.1em; }
   .severity-bar { width:120px; height:4px; background:var(--border); margin-top:6px; }
   .severity-fill { height:100%; background:var(--accent); transition:width 1s ease; }
-
-  .findings-text {
-    font-size: 14px;
-    color: var(--text);
-    line-height: 1.7;
-    padding: 16px;
-    background: rgba(255,60,0,0.04);
-    border-left: 2px solid var(--border);
-    margin-bottom: 20px;
-    font-style: italic;
-  }
-
-  .result-meta {
-    font-family: var(--mono);
-    font-size: 10px;
-    color: var(--muted);
-    line-height: 2;
-  }
-
-  .tx-link { color: var(--accent); text-decoration: none; border-bottom: 1px solid rgba(255,60,0,0.3); }
-  .tx-link:hover { color: var(--accent2); }
-
-  .loading-steps { margin: 20px 0; }
-
-  .step {
-    font-family: var(--mono);
-    font-size: 11px;
-    color: var(--muted);
-    padding: 6px 0;
-    border-bottom: 1px solid var(--border);
-    display: flex; align-items: center; gap: 10px;
-    transition: color 0.3s;
-  }
-
-  .step.active { color: var(--pending); }
-  .step.done { color: var(--safe); }
+  .findings-text { font-size:14px; color:var(--text); line-height:1.7; padding:16px; background:rgba(255,60,0,0.04); border-left:2px solid var(--border); margin-bottom:20px; font-style:italic; }
+  .result-meta { font-family:var(--mono); font-size:10px; color:var(--muted); line-height:2; }
+  .tx-link { color:var(--accent); text-decoration:none; border-bottom:1px solid rgba(255,60,0,0.3); }
+  .tx-link:hover { color:var(--accent2); }
+  .loading-steps { margin:20px 0; }
+  .step { font-family:var(--mono); font-size:11px; color:var(--muted); padding:6px 0; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:10px; transition:color 0.3s; }
+  .step.active { color:var(--pending); }
+  .step.done { color:var(--safe); }
   .step-icon { width:16px; text-align:center; }
-
-  @keyframes spin { to { transform: rotate(360deg); } }
-  .spinning { display:inline-block; animation: spin 1s linear infinite; }
-
-  .info-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 1px;
-    background: var(--border);
-    margin-bottom: 48px;
-  }
-
-  .info-cell { background: var(--surface); padding: 20px; }
-
-  .info-number {
-    font-family: var(--display);
-    font-size: 36px;
-    color: var(--accent);
-    line-height: 1;
-    margin-bottom: 4px;
-  }
-
-  .info-desc {
-    font-family: var(--mono);
-    font-size: 9px;
-    color: var(--muted);
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
-
-  footer {
-    padding-top: 20px;
-    border-top: 1px solid var(--border);
-    font-family: var(--mono);
-    font-size: 10px;
-    color: var(--muted);
-    display: flex;
-    justify-content: space-between;
-    gap: 12px;
-    flex-wrap: wrap;
-  }
-
-  footer a { color: var(--muted); text-decoration: none; }
-  footer a:hover { color: var(--accent); }
+  @keyframes spin { to { transform:rotate(360deg); } }
+  .spinning { display:inline-block; animation:spin 1s linear infinite; }
+  .info-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:1px; background:var(--border); margin-bottom:48px; }
+  .info-cell { background:var(--surface); padding:20px; }
+  .info-number { font-family:var(--display); font-size:36px; color:var(--accent); line-height:1; margin-bottom:4px; }
+  .info-desc { font-family:var(--mono); font-size:9px; color:var(--muted); letter-spacing:0.08em; text-transform:uppercase; }
+  footer { padding-top:20px; border-top:1px solid var(--border); font-family:var(--mono); font-size:10px; color:var(--muted); display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; }
+  footer a { color:var(--muted); text-decoration:none; }
+  footer a:hover { color:var(--accent); }
 </style>
 </head>
 <body>
 <div class="container">
-
   <header>
     <div class="header-top">
       <div class="header-left">
         <div class="sentinel-icon"></div>
-        <div class="status-badge">
-          <div class="status-dot"></div>
-          BRADBURY TESTNET · LIVE
-        </div>
+        <div class="status-badge"><div class="status-dot"></div>BRADBURY TESTNET · LIVE</div>
       </div>
-      <button class="btn-wallet" id="walletBtn" onclick="connectWallet()">
-        Connect Wallet
-      </button>
+      <button class="btn-wallet" id="walletBtn" onclick="connectWallet()">Connect Wallet</button>
     </div>
     <h1>SENTI<span class="accent">NEL</span></h1>
     <p class="tagline">Autonomous AI Smart Contract Auditor · On-Chain · Immutable Verdicts</p>
-    <div class="contract-address">
-      CONTRACT: 0x97C10a91513403DAB0C0b84310A1e0a52AD73569 · BRADBURY TESTNET
-    </div>
+    <div class="contract-address">CONTRACT: 0x97C10a91513403DAB0C0b84310A1e0a52AD73569 · BRADBURY TESTNET</div>
   </header>
 
   <div style="margin-bottom:32px">
@@ -397,9 +118,7 @@
         placeholder="https://raw.githubusercontent.com/user/repo/main/contract.py"
         value="https://raw.githubusercontent.com/lau90eth/genlayer-prediction-market/main/contracts/hello_ai.py">
     </div>
-    <button class="btn-audit" id="auditBtn" onclick="startAudit()">
-      INITIATE AUDIT
-    </button>
+    <button class="btn-audit" id="auditBtn" onclick="startAudit()">INITIATE AUDIT</button>
     <div class="wallet-hint" id="walletHint">Connect wallet to submit · or view last audit result below</div>
   </div>
 
@@ -409,9 +128,7 @@
       <div class="severity-meter" id="severityMeter" style="display:none">
         <div class="severity-number" id="severityNumber">0</div>
         <div class="severity-label">SEVERITY / 10</div>
-        <div class="severity-bar">
-          <div class="severity-fill" id="severityFill" style="width:0%"></div>
-        </div>
+        <div class="severity-bar"><div class="severity-fill" id="severityFill" style="width:0%"></div></div>
       </div>
     </div>
     <div class="loading-steps" id="loadingSteps">
@@ -426,28 +143,19 @@
   </div>
 
   <div class="info-grid">
-    <div class="info-cell">
-      <div class="info-number">5</div>
-      <div class="info-desc">LLM Validators</div>
-    </div>
-    <div class="info-cell">
-      <div class="info-number" id="auditCount">—</div>
-      <div class="info-desc">Audits Completed</div>
-    </div>
-    <div class="info-cell">
-      <div class="info-number">∞</div>
-      <div class="info-desc">Immutable On-Chain</div>
-    </div>
+    <div class="info-cell"><div class="info-number">5</div><div class="info-desc">LLM Validators</div></div>
+    <div class="info-cell"><div class="info-number" id="auditCount">—</div><div class="info-desc">Audits Completed</div></div>
+    <div class="info-cell"><div class="info-number">∞</div><div class="info-desc">Immutable On-Chain</div></div>
   </div>
 
   <footer>
     <span>Built by <a href="https://github.com/lau90eth" target="_blank">lau90eth</a> · GenLayer Builders Program</span>
     <span><a href="https://github.com/lau90eth/genlayer-prediction-market" target="_blank">github.com/lau90eth</a></span>
   </footer>
-
 </div>
 
 <script type="module">
+// ─── Constants ────────────────────────────────────────────────────────────────
 const SENTINEL = '0x97C10a91513403DAB0C0b84310A1e0a52AD73569';
 const CONSENSUS = '0x0112Bf6e83497965A5fdD6Dad1E447a6E004271D';
 const EXPLORER = 'https://explorer-bradbury.genlayer.com/tx/';
@@ -465,28 +173,100 @@ const ADD_TX_ABI_V6 = [{
   outputs: []
 }];
 
-let gljs, client, walletAddress = null;
+// ─── State ────────────────────────────────────────────────────────────────────
+let client = null;
+let walletAddress = null;
 
-async function initGL() {
-  if (client) return;
-  gljs = await import('https://esm.sh/genlayer-js@latest');
-  const { testnetBradbury } = await import('https://esm.sh/genlayer-js@latest/chains');
-  client = gljs.createClient({ chain: testnetBradbury });
+// ─── GenLayer calldata encoder (inline, no dependency on unexported module) ───
+function encodeCalldata(data) {
+  const BITS_IN_TYPE = 3;
+  const TYPE_PINT = 1, TYPE_STR = 4, TYPE_ARR = 5, TYPE_MAP = 6;
+  const SPECIAL_NULL = 0, SPECIAL_FALSE = 8, SPECIAL_TRUE = 16;
+
+  function writeULeb(to, n) {
+    n = BigInt(n);
+    while (true) {
+      const byte = Number(n & 0x7fn);
+      n >>= 7n;
+      if (n === 0n) { to.push(byte); break; }
+      to.push(byte | 0x80);
+    }
+  }
+
+  function encodeNumWithType(to, n, type) {
+    writeULeb(to, (BigInt(n) << BigInt(BITS_IN_TYPE)) | BigInt(type));
+  }
+
+  function encodeNum(to, n) {
+    n = BigInt(n);
+    if (n >= 0n) encodeNumWithType(to, n, TYPE_PINT);
+    else encodeNumWithType(to, -1n - n, 2); // TYPE_NINT
+  }
+
+  function encodeMap(to, entries) {
+    const arr = Array.from(entries);
+    arr.sort((a, b) => a[0] < b[0] ? -1 : a[0] > b[0] ? 1 : 0);
+    encodeNumWithType(to, BigInt(arr.length), TYPE_MAP);
+    for (const [k, v] of arr) {
+      const kb = new TextEncoder().encode(k);
+      writeULeb(to, BigInt(kb.length));
+      for (const c of kb) to.push(c);
+      encodeImpl(to, v);
+    }
+  }
+
+  function encodeImpl(to, data) {
+    if (data === null || data === undefined) { to.push(SPECIAL_NULL); return; }
+    if (data === true) { to.push(SPECIAL_TRUE); return; }
+    if (data === false) { to.push(SPECIAL_FALSE); return; }
+    if (typeof data === 'number') { encodeNum(to, BigInt(data)); return; }
+    if (typeof data === 'bigint') { encodeNum(to, data); return; }
+    if (typeof data === 'string') {
+      const str = new TextEncoder().encode(data);
+      encodeNumWithType(to, BigInt(str.length), TYPE_STR);
+      for (const c of str) to.push(c);
+      return;
+    }
+    if (data instanceof Uint8Array) {
+      encodeNumWithType(to, BigInt(data.length), 3); // TYPE_BYTES
+      for (const c of data) to.push(c);
+      return;
+    }
+    if (Array.isArray(data)) {
+      encodeNumWithType(to, BigInt(data.length), TYPE_ARR);
+      for (const c of data) encodeImpl(to, c);
+      return;
+    }
+    if (typeof data === 'object') {
+      encodeMap(to, Object.entries(data));
+      return;
+    }
+  }
+
+  const arr = [];
+  encodeImpl(arr, data);
+  return new Uint8Array(arr);
 }
 
+// ─── Init genlayer-js client ──────────────────────────────────────────────────
+async function initClient() {
+  if (client) return client;
+  const { createClient } = await import('https://esm.sh/genlayer-js@latest');
+  const { testnetBradbury } = await import('https://esm.sh/genlayer-js@latest/chains');
+  client = createClient({ chain: testnetBradbury });
+  return client;
+}
+
+// ─── Wallet connect ───────────────────────────────────────────────────────────
 window.connectWallet = async function() {
-  if (!window.ethereum) { alert('MetaMask not found.'); return; }
+  if (!window.ethereum) { alert('MetaMask not found. Please install MetaMask.'); return; }
   try {
     const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
     walletAddress = accounts[0];
 
-    // Try to switch/add Bradbury chain
     const chainIdHex = '0x' + (14853).toString(16);
     try {
-      await window.ethereum.request({
-        method: 'wallet_switchEthereumChain',
-        params: [{ chainId: chainIdHex }],
-      });
+      await window.ethereum.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: chainIdHex }] });
     } catch(e) {
       if (e.code === 4902 || e.code === -32603) {
         await window.ethereum.request({
@@ -504,34 +284,37 @@ window.connectWallet = async function() {
 
     const btn = document.getElementById('walletBtn');
     btn.textContent = walletAddress.slice(0,6) + '...' + walletAddress.slice(-4);
-    btn.className = 'btn-wallet connected';
+    btn.classList.add('connected');
     document.getElementById('walletHint').textContent = '✓ Wallet connected · Ready to audit';
   } catch(e) {
-    console.error(e);
     alert('Connection failed: ' + e.message);
   }
 };
 
+// ─── Step animation ───────────────────────────────────────────────────────────
 function setStep(n, status) {
-  const el = document.getElementById(`step${n}`);
+  const el = document.getElementById('step' + n);
   if (!el) return;
   const icon = el.querySelector('.step-icon');
-  el.className = `step ${status}`;
+  el.className = 'step ' + status;
   if (status === 'active') icon.innerHTML = '<span class="spinning">◌</span>';
   else if (status === 'done') icon.textContent = '✓';
   else icon.textContent = '○';
 }
 
+// ─── Read contract state ──────────────────────────────────────────────────────
 async function readState() {
-  const [v, s, f, c] = await Promise.all([
-    client.readContract({ address: SENTINEL, functionName: 'get_verdict', args: [] }),
-    client.readContract({ address: SENTINEL, functionName: 'get_severity', args: [] }),
-    client.readContract({ address: SENTINEL, functionName: 'get_findings', args: [] }),
-    client.readContract({ address: SENTINEL, functionName: 'get_count', args: [] }),
+  const c = await initClient();
+  const [v, s, f, cnt] = await Promise.all([
+    c.readContract({ address: SENTINEL, functionName: 'get_verdict', args: [] }),
+    c.readContract({ address: SENTINEL, functionName: 'get_severity', args: [] }),
+    c.readContract({ address: SENTINEL, functionName: 'get_findings', args: [] }),
+    c.readContract({ address: SENTINEL, functionName: 'get_count', args: [] }),
   ]);
-  return { verdict: v, severity: s, findings: f, count: c };
+  return { verdict: v, severity: s, findings: f, count: cnt };
 }
 
+// ─── Show result ──────────────────────────────────────────────────────────────
 function showResult(v, s, f, hash, count) {
   const panel = document.getElementById('resultPanel');
   const verdict = document.getElementById('verdictDisplay');
@@ -541,30 +324,31 @@ function showResult(v, s, f, hash, count) {
 
   document.getElementById('loadingSteps').style.display = 'none';
 
-  const cls = v === 'UNSAFE' ? 'unsafe' : (v === 'SAFE' ? 'safe' : 'error');
-  panel.className = `result-panel visible ${cls}`;
-  verdict.className = `verdict-display ${cls}`;
+  const cls = v === 'UNSAFE' ? 'unsafe' : v === 'SAFE' ? 'safe' : 'error';
+  panel.className = 'result-panel visible ' + cls;
+  verdict.className = 'verdict-display ' + cls;
   verdict.textContent = v;
 
   if (f) { findings.textContent = f; findings.style.display = 'block'; }
 
   const sev = parseInt(s) || 0;
   document.getElementById('severityNumber').textContent = sev;
-  document.getElementById('severityFill').style.width = `${sev * 10}%`;
+  document.getElementById('severityFill').style.width = (sev * 10) + '%';
   document.getElementById('severityFill').style.background =
     sev > 6 ? 'var(--unsafe)' : sev > 3 ? 'var(--pending)' : 'var(--safe)';
   severity.style.display = 'block';
 
   meta.innerHTML = 'VERDICT WRITTEN ON-CHAIN · BRADBURY TESTNET';
-  if (hash) meta.innerHTML += `<br>TX: <a class="tx-link" href="${EXPLORER}${hash}" target="_blank">${hash.slice(0,22)}...</a>`;
+  if (hash) {
+    meta.innerHTML += '<br>TX: <a class="tx-link" href="' + EXPLORER + hash + '" target="_blank">' + hash.slice(0,22) + '...</a>';
+  }
   if (count) document.getElementById('auditCount').textContent = count;
 }
 
+// ─── Main audit function ──────────────────────────────────────────────────────
 window.startAudit = async function() {
   const url = document.getElementById('urlInput').value.trim();
   if (!url) return;
-
-  await initGL();
 
   const btn = document.getElementById('auditBtn');
   const panel = document.getElementById('resultPanel');
@@ -582,28 +366,28 @@ window.startAudit = async function() {
   severity.style.display = 'none';
   steps.style.display = 'block';
   meta.textContent = '';
-  [1,2,3,4,5].forEach(n => setStep(n, ''));
+  [1,2,3,4,5].forEach(function(n) { setStep(n, ''); });
 
   try {
+    await initClient();
+
     if (!walletAddress) {
-      // Read-only mode
-      setStep(1,'active');
-      await new Promise(r => setTimeout(r, 800));
-      [1,2,3,4,5].forEach(n => setStep(n,'done'));
+      // Read-only: show last result
+      setStep(1, 'active');
+      await new Promise(function(r) { setTimeout(r, 800); });
+      [1,2,3,4,5].forEach(function(n) { setStep(n, 'done'); });
       const state = await readState();
       showResult(state.verdict, state.severity, state.findings, null, state.count);
-      document.getElementById('walletHint').textContent = '⚠ Showing last audit result. Connect wallet to audit a new URL.';
+      document.getElementById('walletHint').textContent = '⚠ Showing last audit. Connect wallet to audit a new URL.';
       btn.disabled = false;
       return;
     }
 
+    // Write mode via MetaMask
     setStep(1, 'active');
 
-    // Encode GenLayer calldata: {method, args}
-    const calldataObj = { method: 'audit', args: [url] };
     const calldataEncoded = encodeCalldata({ method: 'audit', args: [url] });
 
-    // Encode addTransaction via viem
     const { encodeFunctionData } = await import('https://esm.sh/viem@latest');
     const validUntil = BigInt(Math.floor(Date.now() / 1000) + 3600);
 
@@ -632,15 +416,19 @@ window.startAudit = async function() {
 
     setStep(1, 'done');
     setStep(2, 'active');
-    meta.innerHTML = `TX: <a class="tx-link" href="${EXPLORER}${hash}" target="_blank">${hash.slice(0,22)}...</a>`;
+    meta.innerHTML = 'TX: <a class="tx-link" href="' + EXPLORER + hash + '" target="_blank">' + hash.slice(0,22) + '...</a>';
 
-    // Poll every 15s
+    // Poll every 15s for result
     let attempts = 0;
-    const prevVerdict = (await readState()).verdict;
+    let prevVerdict = '';
+    try {
+      const st = await readState();
+      prevVerdict = st.verdict || '';
+    } catch(e) {}
 
-    const poll = setInterval(async () => {
+    const poll = setInterval(async function() {
       attempts++;
-      if (attempts === 5)  { setStep(2,'done'); setStep(3, 'active'); }
+      if (attempts === 5)  { setStep(2,'done'); setStep(3,'active'); }
       if (attempts === 10) { setStep(3,'done'); setStep(4,'active'); }
       if (attempts === 16) { setStep(4,'done'); setStep(5,'active'); }
       if (attempts > 30) {
@@ -649,16 +437,15 @@ window.startAudit = async function() {
         verdict.className = 'verdict-display error';
         verdict.textContent = 'TIMEOUT';
         steps.style.display = 'none';
-        meta.innerHTML = `TX submitted but consensus taking longer than expected.<br><a class="tx-link" href="${EXPLORER}${hash}" target="_blank">Check on explorer</a>`;
+        meta.innerHTML = 'Consensus taking longer than expected. <a class="tx-link" href="' + EXPLORER + hash + '" target="_blank">Check on explorer</a>';
         btn.disabled = false;
         return;
       }
-
       try {
         const state = await readState();
         if (state.verdict && state.verdict !== 'PENDING' && state.verdict !== prevVerdict) {
           clearInterval(poll);
-          [2,3,4,5].forEach(n => setStep(n,'done'));
+          [2,3,4,5].forEach(function(n) { setStep(n,'done'); });
           showResult(state.verdict, state.severity, state.findings, hash, state.count);
           btn.disabled = false;
         }
@@ -676,17 +463,18 @@ window.startAudit = async function() {
   }
 };
 
-// Init: load audit count
-(async () => {
+// ─── Init: load audit count and last result ───────────────────────────────────
+(async function() {
   try {
-    await initGL();
+    await initClient();
     const state = await readState();
     if (state.count) document.getElementById('auditCount').textContent = state.count;
-    // Show last result if available
     if (state.verdict && state.verdict !== 'PENDING') {
       showResult(state.verdict, state.severity, state.findings, null, state.count);
     }
-  } catch(e) { console.log('Init error:', e); }
+  } catch(e) {
+    console.log('Init error:', e.message);
+  }
 })();
 </script>
 </body>
