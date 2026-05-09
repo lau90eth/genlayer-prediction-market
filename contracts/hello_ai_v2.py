@@ -15,25 +15,22 @@ class HelloAI(gl.Contract):
         url = str(evidence_url)
 
         def leader_fn() -> str:
-            page = gl.nondet.web.get(url)
-            snippet = page[:3000] if len(page) > 3000 else page
-            prompt = (
-                f"Based on this evidence:\n\n{snippet}\n\n"
-                f"Answer in one sentence: {q}"
-            )
+            page = gl.nondet.web.get(url).body.decode('utf-8', errors='replace')[:3000]
+            prompt = f"Based on this evidence:\n\n{page}\n\nAnswer in one sentence: {q}"
             return gl.nondet.exec_prompt(prompt)
 
         def validator_fn(leaders_res) -> bool:
             if not isinstance(leaders_res, gl.vm.Return):
                 return False
-            leader_answer = leaders_res.value
-            if not leader_answer or len(leader_answer.strip()) < 5:
+            leader_answer = leaders_res.calldata
+            if not isinstance(leader_answer, str):
                 return False
-            page = gl.nondet.web.get(url)
-            snippet = page[:3000] if len(page) > 3000 else page
+            if len(leader_answer.strip()) < 5:
+                return False
+            page = gl.nondet.web.get(url).body.decode('utf-8', errors='replace')[:3000]
             prompt = (
-                f"Based on this evidence:\n\n{snippet}\n\n"
-                f"Does this answer make sense for the question '{q}'? "
+                f"Based on this evidence:\n\n{page}\n\n"
+                f"Does this answer make sense for the question '{q}'?\n"
                 f"Answer: {leader_answer}\n"
                 f"Reply only YES or NO."
             )
