@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ConsensusLens — Intelligent Contract Benchmark Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #030712; --surface: #0d1117; --border: #1f2937;
+    --accent: #00ff88; --accent2: #00b4ff; --accent3: #ff6b35;
+    --warn: #f59e0b; --danger: #ef4444;
+    --text: #e2e8f0; --muted: #4b5563;
+    --mono: 'Share Tech Mono', monospace; --sans: 'Syne', sans-serif;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--bg); color:var(--text); font-family:var(--sans); min-height:100vh; overflow-x:hidden; }
+  body::before { content:''; position:fixed; inset:0; background-image:linear-gradient(rgba(0,255,136,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,255,136,0.03) 1px,transparent 1px); background-size:40px 40px; pointer-events:none; z-index:0; }
+  .container { position:relative; z-index:1; max-width:1100px; margin:0 auto; padding:0 24px 80px; }
+  header { padding:48px 0 40px; border-bottom:1px solid var(--border); margin-bottom:40px; }
+  .header-badge { display:inline-flex; align-items:center; gap:8px; font-family:var(--mono); font-size:11px; color:var(--accent); border:1px solid rgba(0,255,136,0.3); padding:4px 12px; border-radius:2px; margin-bottom:16px; letter-spacing:0.1em; }
+  .dot { width:6px; height:6px; background:var(--accent); border-radius:50%; animation:pulse 2s ease-in-out infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+  h1 { font-size:clamp(28px,5vw,48px); font-weight:800; line-height:1.1; letter-spacing:-0.02em; margin-bottom:8px; }
+  h1 span { color:var(--accent); }
+  .subtitle { font-family:var(--mono); font-size:12px; color:var(--muted); letter-spacing:0.05em; }
+
+  /* Contract selector */
+  .selector { margin-bottom:32px; }
+  .selector-label { font-family:var(--mono); font-size:10px; color:var(--accent); letter-spacing:0.15em; margin-bottom:12px; display:flex; align-items:center; gap:8px; }
+  .selector-label::after { content:''; flex:1; height:1px; background:var(--border); }
+  .contract-tabs { display:flex; gap:8px; flex-wrap:wrap; }
+  .tab { font-family:var(--mono); font-size:11px; padding:8px 16px; border:1px solid var(--border); background:var(--surface); color:var(--muted); cursor:pointer; border-radius:2px; transition:all 0.15s; letter-spacing:0.05em; }
+  .tab:hover { border-color:var(--accent); color:var(--text); }
+  .tab.active { border-color:var(--accent); color:var(--accent); background:rgba(0,255,136,0.05); }
+  .tab-addr { font-size:9px; opacity:0.5; display:block; margin-top:2px; }
+
+  /* Stats grid */
+  .stats-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--border); margin-bottom:32px; }
+  .stat { background:var(--surface); padding:20px 24px; }
+  .stat-value { font-family:var(--mono); font-size:28px; font-weight:700; line-height:1; margin-bottom:4px; }
+  .stat-label { font-family:var(--mono); font-size:9px; color:var(--muted); letter-spacing:0.1em; text-transform:uppercase; }
+  .stat-value.green { color:var(--accent); }
+  .stat-value.blue { color:var(--accent2); }
+  .stat-value.orange { color:var(--accent3); }
+  .stat-value.warn { color:var(--warn); }
+
+  /* Stability bar */
+  .stability-section { margin-bottom:32px; }
+  .section-title { font-family:var(--mono); font-size:10px; color:var(--accent); letter-spacing:0.15em; margin-bottom:12px; display:flex; align-items:center; gap:8px; }
+  .section-title::after { content:''; flex:1; height:1px; background:var(--border); }
+  .stability-bar-wrap { background:var(--surface); border:1px solid var(--border); padding:20px 24px; }
+  .stability-bar-label { display:flex; justify-content:space-between; font-family:var(--mono); font-size:11px; margin-bottom:10px; }
+  .stability-bar-bg { height:8px; background:var(--border); border-radius:2px; overflow:hidden; }
+  .stability-bar-fill { height:100%; border-radius:2px; transition:width 1s ease; }
+
+  /* Timeline chart */
+  .timeline-section { margin-bottom:32px; }
+  .chart-wrap { background:var(--surface); border:1px solid var(--border); padding:20px 24px; overflow-x:auto; }
+  .chart { display:flex; align-items:flex-end; gap:4px; height:80px; min-width:100%; }
+  .bar-wrap { display:flex; flex-direction:column; align-items:center; gap:4px; flex:1; min-width:20px; }
+  .bar { width:100%; border-radius:2px 2px 0 0; transition:height 0.5s ease; cursor:pointer; min-height:2px; }
+  .bar.finalized { background:var(--accent); }
+  .bar.undetermined { background:var(--danger); }
+  .bar.error { background:var(--muted); }
+  .bar-label { font-family:var(--mono); font-size:8px; color:var(--muted); writing-mode:vertical-rl; transform:rotate(180deg); white-space:nowrap; }
+
+  /* TX table */
+  .table-section { margin-bottom:32px; }
+  .table-wrap { background:var(--surface); border:1px solid var(--border); overflow:hidden; }
+  table { width:100%; border-collapse:collapse; }
+  th { font-family:var(--mono); font-size:9px; color:var(--muted); letter-spacing:0.1em; text-transform:uppercase; padding:12px 16px; text-align:left; border-bottom:1px solid var(--border); }
+  td { font-family:var(--mono); font-size:11px; padding:10px 16px; border-bottom:1px solid rgba(31,41,55,0.5); }
+  tr:last-child td { border-bottom:none; }
+  tr:hover td { background:rgba(255,255,255,0.02); }
+  .badge { display:inline-block; padding:2px 8px; border-radius:2px; font-size:9px; letter-spacing:0.08em; }
+  .badge.finalized { background:rgba(0,255,136,0.1); color:var(--accent); border:1px solid rgba(0,255,136,0.2); }
+  .badge.undetermined { background:rgba(239,68,68,0.1); color:var(--danger); border:1px solid rgba(239,68,68,0.2); }
+  .badge.pending { background:rgba(245,158,11,0.1); color:var(--warn); border:1px solid rgba(245,158,11,0.2); }
+  .badge.other { background:rgba(75,85,99,0.2); color:var(--muted); border:1px solid var(--border); }
+  .tx-link { color:var(--muted); text-decoration:none; border-bottom:1px solid var(--border); }
+  .tx-link:hover { color:var(--accent); }
+
+  /* Loading */
+  .loading { font-family:var(--mono); font-size:12px; color:var(--muted); padding:40px; text-align:center; animation:blink 1s step-end infinite; }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+  /* Input for custom contract */
+  .custom-input { display:flex; gap:8px; margin-top:8px; }
+  .custom-input input { flex:1; background:var(--bg); border:1px solid var(--border); color:var(--text); font-family:var(--mono); font-size:12px; padding:8px 12px; outline:none; border-radius:2px; }
+  .custom-input input:focus { border-color:var(--accent); }
+  .custom-input button { font-family:var(--mono); font-size:11px; padding:8px 16px; background:var(--accent); color:var(--bg); border:none; cursor:pointer; font-weight:700; border-radius:2px; }
+
+  footer { padding-top:24px; border-top:1px solid var(--border); font-family:var(--mono); font-size:11px; color:var(--muted); display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px; }
+  footer a { color:var(--muted); text-decoration:none; }
+  footer a:hover { color:var(--accent); }
+
+  @media(max-width:600px) { .stats-grid { grid-template-columns:repeat(2,1fr); } }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <div class="header-badge"><div class="dot"></div>BRADBURY TESTNET · LIVE DATA</div>
+    <h1>Consensus<span>Lens</span></h1>
+    <p class="subtitle">Intelligent Contract benchmark dashboard · consensus rate · execution time · disagreement analysis</p>
+  </header>
+
+  <div class="selector">
+    <div class="selector-label">SELECT CONTRACT</div>
+    <div class="contract-tabs" id="tabs">
+      <div class="tab active" onclick="loadContract('0x527D6B123cd2411BE5637bDA17b9d874D85Fe838','HelloAI',this)">
+        HelloAI
+        <span class="tab-addr">0x527D...e838</span>
+      </div>
+      <div class="tab" onclick="loadContract('0xba13012389EcDF77825956d3647525D8a96B1269','Sentinel',this)">
+        Sentinel
+        <span class="tab-addr">0xba13...1269</span>
+      </div>
+      <div class="tab" onclick="loadContract('0x381017E9623982a9D8d067b4cAaAAb6B090c0f18','PredictionMarket',this)">
+        PredictionMarket
+        <span class="tab-addr">0x3810...2CE</span>
+      </div>
+      <div class="tab" onclick="loadContract('0x23E4AC68D7F32354877d54751B83eB7f28Ea794B','DisputeResolver',this)">
+        DisputeResolver
+        <span class="tab-addr">0x23E4...794B</span>
+      </div>
+    </div>
+    <div class="custom-input">
+      <input id="customAddr" placeholder="Or enter any contract address: 0x..." />
+      <button onclick="loadCustom()">ANALYZE</button>
+    </div>
+  </div>
+
+  <div id="dashboard">
+    <div class="loading">⟳ Loading data from Bradbury explorer...</div>
+  </div>
+
+  <footer>
+    <span>Built by <a href="https://github.com/lau90eth" target="_blank">lau90eth</a> · GenLayer Builders Program</span>
+    <span><a href="https://github.com/lau90eth/genlayer-prediction-market" target="_blank">github.com/lau90eth/genlayer-prediction-market</a></span>
+  </footer>
+</div>
+
+<script>
+const EXPLORER = 'https://explorer-bradbury.genlayer.com';
+const API = `${EXPLORER}/api/v1`;
+
+async function fetchTxs(address) {
+  const res = await fetch(`${API}/transactions?address=${address}&limit=50`);
+  const data = await res.json();
+  return data.transactions || [];
+}
+
+function msToSec(ms) {
+  if (!ms || ms === '0') return '—';
+  const s = Math.round(Number(ms) / 1000);
+  if (s > 60) return `${Math.round(s/60)}m ${s%60}s`;
+  return `${s}s`;
+}
+
+function statusBadge(status) {
+  if (status === 'finalized') return '<span class="badge finalized">FINALIZED</span>';
+  if (status === 'undetermined') return '<span class="badge undetermined">UNDETERMINED</span>';
+  if (status === 'pending') return '<span class="badge pending">PENDING</span>';
+  return `<span class="badge other">${status.toUpperCase()}</span>`;
+}
+
+function stabilityColor(pct) {
+  if (pct >= 70) return 'var(--accent)';
+  if (pct >= 40) return 'var(--warn)';
+  return 'var(--danger)';
+}
+
+async function loadContract(address, name, tabEl) {
+  // Update tabs
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  if (tabEl) tabEl.classList.add('active');
+
+  const dash = document.getElementById('dashboard');
+  dash.innerHTML = '<div class="loading">⟳ Fetching data from Bradbury explorer...</div>';
+
+  try {
+    const txs = await fetchTxs(address);
+
+    const calls = txs.filter(t => t.transaction_type === 'CONTRACT_CALL');
+    const finalized = calls.filter(t => t.status === 'finalized');
+    const undetermined = calls.filter(t => t.status === 'undetermined');
+    const pending = calls.filter(t => t.status === 'pending');
+
+    const total = calls.length;
+    const consensusRate = total > 0 ? Math.round((finalized.length / total) * 100) : 0;
+
+    const execTimes = finalized
+      .map(t => t.finalization_timestamp && t.activation_timestamp
+        ? (t.finalization_timestamp - t.activation_timestamp) * 1000 : 0)
+      .filter(ms => ms > 0);
+    const avgMs = execTimes.length > 0
+      ? Math.round(execTimes.reduce((a,b) => a+b, 0) / execTimes.length)
+      : 0;
+
+    // Build dashboard HTML
+    dash.innerHTML = `
+      <div class="stats-grid">
+        <div class="stat">
+          <div class="stat-value green">${consensusRate}%</div>
+          <div class="stat-label">Consensus Rate</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value blue">${total}</div>
+          <div class="stat-label">Total Calls</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value orange">${undetermined.length}</div>
+          <div class="stat-label">Disagreements</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value warn">${msToSec(avgMs)}</div>
+          <div class="stat-label">Avg Exec Time</div>
+        </div>
+      </div>
+
+      <div class="stability-section">
+        <div class="section-title">STABILITY SCORE</div>
+        <div class="stability-bar-wrap">
+          <div class="stability-bar-label">
+            <span>${name} · ${address.slice(0,10)}...${address.slice(-6)}</span>
+            <span style="color:${stabilityColor(consensusRate)}">${consensusRate}% consensus</span>
+          </div>
+          <div class="stability-bar-bg">
+            <div class="stability-bar-fill" style="width:${consensusRate}%;background:${stabilityColor(consensusRate)}"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-section">
+        <div class="section-title">EXECUTION TIMELINE</div>
+        <div class="chart-wrap">
+          <div class="chart" id="chart"></div>
+        </div>
+      </div>
+
+      <div class="table-section">
+        <div class="section-title">RECENT CALLS</div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Status</th>
+                <th>TX Hash</th>
+                <th>Submitted</th>
+                <th>Exec Time</th>
+                <th>Validators</th>
+              </tr>
+            </thead>
+            <tbody id="tx-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    `;
+
+    // Build chart
+    const chartEl = document.getElementById('chart');
+    const recent = calls.slice(0, 30).reverse();
+    const maxMs = Math.max(...execTimes, 1);
+    recent.forEach(tx => {
+      const ms = tx.finalization_timestamp && tx.activation_timestamp
+        ? (tx.finalization_timestamp - tx.activation_timestamp) * 1000 : 0;
+      const heightPct = ms > 0 ? Math.max(10, Math.round((ms / maxMs) * 100)) : 10;
+      const cls = tx.status === 'finalized' ? 'finalized'
+                : tx.status === 'undetermined' ? 'undetermined' : 'error';
+      const wrap = document.createElement('div');
+      wrap.className = 'bar-wrap';
+      wrap.title = `${tx.status} · ${msToSec(ms)}`;
+      wrap.innerHTML = `
+        <div class="bar ${cls}" style="height:${heightPct}%"></div>
+        <div class="bar-label">${tx.hash.slice(2,6)}</div>
+      `;
+      chartEl.appendChild(wrap);
+    });
+
+    // Build table
+    const tbody = document.getElementById('tx-tbody');
+    calls.slice(0, 20).forEach(tx => {
+      const ms = tx.finalization_timestamp && tx.activation_timestamp
+        ? (tx.finalization_timestamp - tx.activation_timestamp) * 1000 : 0;
+      const submitted = new Date(tx.submission_timestamp * 1000).toLocaleString();
+      const validators = tx.data?.params?.encoded_data?._numOfInitialValidators ?? '—';
+      tbody.innerHTML += `
+        <tr>
+          <td>${statusBadge(tx.status)}</td>
+          <td><a class="tx-link" href="${EXPLORER}/tx/${tx.hash}" target="_blank">${tx.hash.slice(0,18)}...</a></td>
+          <td>${submitted}</td>
+          <td>${msToSec(ms)}</td>
+          <td>${validators}</td>
+        </tr>
+      `;
+    });
+
+  } catch(e) {
+    dash.innerHTML = `<div class="loading">Error: ${e.message}</div>`;
+  }
+}
+
+function loadCustom() {
+  const addr = document.getElementById('customAddr').value.trim();
+  if (!addr || !addr.startsWith('0x')) return;
+  loadContract(addr, 'Custom', null);
+}
+
+// Init
+loadContract('0x527D6B123cd2411BE5637bDA17b9d874D85Fe838', 'HelloAI', document.querySelector('.tab'));
+</script>
+</body>
+</html>
+
