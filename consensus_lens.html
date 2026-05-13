@@ -144,10 +144,12 @@
 
 <script>
 const EXPLORER = 'https://explorer-bradbury.genlayer.com';
+const CORS = 'https://corsproxy.io/?';
 const API = `${EXPLORER}/api/v1`;
 
 async function fetchTxs(address) {
-  const res = await fetch(`${API}/transactions?address=${address}&limit=50`);
+  const url = `${API}/transactions?address=${address}&limit=50`;
+  const res = await fetch(`${CORS}${encodeURIComponent(url)}`);
   const data = await res.json();
   return data.transactions || [];
 }
