@@ -147,11 +147,19 @@ const EXPLORER = 'https://explorer-bradbury.genlayer.com';
 const CORS = 'https://api.allorigins.win/raw?url=';
 const API = `${EXPLORER}/api/v1`;
 
-async function fetchTxs(address) {
+async function fetchTxs(address, retries = 3) {
   const url = `${API}/transactions?address=${address}&limit=50`;
-  const res = await fetch(`${CORS}${encodeURIComponent(url)}`);
-  const data = await res.json();
-  return data.transactions || [];
+  for (let i = 0; i < retries; i++) {
+    try {
+      const res = await fetch(`${CORS}${encodeURIComponent(url)}`);
+      const text = await res.text();
+      const data = JSON.parse(text);
+      return data.transactions || [];
+    } catch(e) {
+      if (i < retries - 1) await new Promise(r => setTimeout(r, 2000 * (i + 1)));
+      else throw e;
+    }
+  }
 }
 
 function msToSec(ms) {
