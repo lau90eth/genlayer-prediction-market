@@ -20,7 +20,7 @@ class Sentinel(gl.Contract):
         target_url = str(url)
 
         def leader_fn() -> str:
-            source_code = gl.nondet.web.get(target_url).body.decode('utf-8', errors='replace')[:2000]
+            source_code = gl.nondet.web.get(f'https://api.allorigins.win/raw?url={target_url}').body.decode('utf-8', errors='replace')[:2000]
             prompt = (
                 f"Security audit this smart contract. Reply ONLY:\n"
                 f"VERDICT: SAFE or UNSAFE\n"
