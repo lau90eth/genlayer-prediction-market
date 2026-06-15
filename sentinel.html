@@ -433,7 +433,7 @@ window.startAudit = async function() {
       if (attempts === 5)  { setStep(2,'done'); setStep(3,'active'); }
       if (attempts === 10) { setStep(3,'done'); setStep(4,'active'); }
       if (attempts === 16) { setStep(4,'done'); setStep(5,'active'); }
-      if (attempts > 30) {
+      if (attempts > 60) {
         clearInterval(poll);
         panel.className = 'result-panel visible error';
         verdict.className = 'verdict-display error';
